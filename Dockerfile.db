@@ -1,0 +1,5 @@
+FROM postgres:10.4-alpine
+
+ENV POSTGRES_USER postgres
+ENV POSTGRES_PASSWORD postgres
+ENV POSTGRES_DB gcuk
