@@ -1,31 +1,41 @@
 package main
 
 import (
-	"gopherconuk/homepage"
-	"gopherconuk/server"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/PeloDev/go-server-template/homepage"
+	"github.com/PeloDev/go-server-template/server"
 )
 
 var (
-	GcukCertFile    = os.Getenv("GCUK_CERT_FILE")
-	GcukKeyFile     = os.Getenv("GCUK_KEY_FILE")
-	GcukServiceAddr = os.Getenv("GCUK_SERVICE_ADDR")
+	// TODO: serve via TLS (securely)
+	// CertFile    = os.Getenv("GO_CERT_FILE")
+	// KeyFile     = os.Getenv("GO_KEY_FILE")
+	ServiceAddr = os.Getenv("GO_SERVICE_ADDR")
 )
 
 func main() {
-	logger := log.New(os.Stdout, "gcuk ", log.LstdFlags|log.Lshortfile)
+	if len(ServiceAddr) < 1 {
+		ServiceAddr = ":8080"
+	}
 
+	logger := log.New(os.Stdout, "goServerT ", log.LstdFlags|log.Lshortfile)
+
+	// define features with logger
 	h := homepage.NewHandlers(logger)
 
 	mux := http.NewServeMux()
+
+	// feature routes
 	h.SetupRoutes(mux)
 
-	srv := server.New(mux, GcukServiceAddr)
+	srv := server.New(mux, ServiceAddr)
 
 	logger.Println("server starting")
-	err := srv.ListenAndServeTLS(GcukCertFile, GcukKeyFile)
+	// err := srv.ListenAndServeTLS(CertFile, KeyFile) // TODO: serve via TLS (securely)
+	err := srv.ListenAndServe()
 	if err != nil {
 		logger.Fatalf("server failed to start: %v", err)
 	}
