@@ -1,55 +1,50 @@
-# Go micro-service in ~30 minutes
+# Go Web Templates
 
-This is a Go micro-service written from scratch.
+This is a Go Web Server Swiss Army Knife, where various web tools are explored and prototyped in Golang, and referenced to quickly get basic boilerplate projects going.
 
-It shows how to use [net/http](https://godoc.org/net/http), and how to structure a Go project.
+## About
 
-It relies on Go 1.11 Beta 2 and the upcoming "Go modules" (formerly known as "vgo") support.
+The base of this project was built off of [this one](https://github.com/dlsniper/gopherconuk) by Florin Pățan and I suggest you have a look at it for useful links and resources:
 
-Dependency injection is used to insert a logger instance into the handler.
+- It shows how to use [net/http](https://godoc.org/net/http), and how to structure a Go project.
 
-You can also notice how the test is constructed in order to provide testing for the handler.
+- Dependency injection is used to insert a logger instance into the handler.
 
-A Docker container is available, thanks to the Dockerfile. It shows how to construct such containers. 
+- You can also notice how the test is constructed in order to provide testing for the handler.
 
-## How to use
+- A Docker container is available, thanks to the Dockerfile. It shows how to construct such containers.
 
-Because this project uses go modules, as long as you are using Go 1.11 Beta 2+ or Go 1.10 with vgo support,
-you should be ok.
+On top of that the project includes the following:
 
-Clone this anywhere in your computer and create a project in your editor. I'm using [GoLand IDE](https://jetbrains.com/go) in order to work
-on the project during the presentation as well as have support for go modules.
+- A mysql database connection - using [Go-MySQL-Driver](https://github.com/go-sql-driver/mysql#usage) through [SQLDrivers](https://github.com/golang/go/wiki/SQLDrivers)
 
-The bundled, self-signed, certificates are bound to either ` dev.localhost:8080 ` or ` docker.localhost:8080 `. I obviously
-do not recommend using these in production.
+- A basic websocket endpoint using (Gorilla WebSocket)[github.com/gorilla/websocket]
 
-## Presentation link
+## Usage
 
-I created this as part of the presentation at [GopherCon UK 18](https://www.gophercon.co.uk/).
+Clone this anywhere onto your computer and open the project in your editor.
 
-The link for the video will be updated here when the presentation is out.
+If you prefer to use Go Mod run the following (using your own workspace directory):
 
-## References 
+```
+export GO111MODULE=on && go mod init github.com/PeloDev/go-server-template
+```
 
-### Structuring Go applications
+You can also create a `.env` file based on the [.env.example template](.env.example).
 
-In order to learn how to approach package design in Go, you can read the following resources:
+You will then have to export the variables before running the project. For example:
 
-- [Style guideline for Go packages - JBD](https://rakyll.org/style-packages/)
-- [Standard Package Layout - Ben Johnson](https://medium.com/@benbjohnson/standard-package-layout-7cdbc8391fc1#.ds38va3pp)
-- [Go best practices, six years in - Peter Bourgon](https://peter.bourgon.org/go-best-practices-2016/#repository-structure)
+```
+set -o allexport; source .env; set +o allexport
+```
 
-Once done, this article will help you understand the [Design Philosophy On Packaging by William Kennedy](https://www.ardanlabs.com/blog/2017/02/design-philosophy-on-packaging.html).
+To run the project, in the root directory use:
 
-### Exposing Go applications to the Internet
+```
+go run main.go
+```
 
-[This article](https://blog.cloudflare.com/exposing-go-on-the-internet/) describes how you can start approaching  
-
-## Thank you
-
-I would like to thank you [William "Bill" Kennedy](https://twitter.com/goinggodotnet) for the inspiration he provided on
-getting me to do this talk.
-
+Docker instructions pending...
 
 ## License
 
