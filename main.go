@@ -5,8 +5,9 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/PeloDev/go-server-template/examples"
 	"github.com/PeloDev/go-server-template/homepage"
-	"github.com/PeloDev/go-server-template/server"
+	"github.com/rs/cors"
 )
 
 var (
@@ -25,17 +26,28 @@ func main() {
 
 	// define features with logger
 	h := homepage.NewHandlers(logger)
+	egs := examples.NewHandlers(logger)
 
 	mux := http.NewServeMux()
 
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "PUT", "OPTIONS", "POST", "DELETE"},
+		AllowCredentials: true,
+	})
+
+	// decorate existing handler with cors functionality set in c
+	handler := c.Handler(mux)
+
 	// feature routes
 	h.SetupRoutes(mux)
-
-	srv := server.New(mux, ServiceAddr)
+	egs.SetupRoutes(mux)
 
 	logger.Println("server starting")
+
+	// srv := server.New(mux, ServiceAddr)
 	// err := srv.ListenAndServeTLS(CertFile, KeyFile) // TODO: serve via TLS (securely)
-	err := srv.ListenAndServe()
+	err := http.ListenAndServe(ServiceAddr, handler)
 	if err != nil {
 		logger.Fatalf("server failed to start: %v", err)
 	}
